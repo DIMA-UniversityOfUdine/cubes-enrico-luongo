@@ -10,14 +10,15 @@ Per quanto riguarda la scelta tra applicare una texture al terreno o creare un "
 il video. Questo è stato ottenuto facendo eseguire alla camera prospettica traslazioni e rotazioni nella scena in modo
 da presentarla e dare una vista completa.
 Infine il progetto fa uso di varie librerie di Three.js (quella incluse inzialmente) contenute in lib, una texture 
-per le piramidi contenuta in textures e di un file PyramidsAndSphinx.html contenente tutto il codice.
+per le piramidi contenuta in textures,un file PyramidsAndSphinx.html contenente tutto il codice ed una cartella snapshots con
+alcuni esempi.
 
 ----------------------------------------------------------------------------------------------------------------------------
 
 # RISULTATI
 
 La scena è composta da due piramidi che vengono create durante i movimenti della telecamera ed una sfinge che è presente 
-dall'inizio della scena. La sfinge ha una animazione che inizierà quando la telecamera si troverà di fronte a lei, senza ripetersi.
+dall'inizio della scena. La sfinge ha una animazione che si ripeterà in loop dall'inizio della scena.
 
 # IMMAGINI
 
@@ -34,7 +35,7 @@ dall'inizio della scena. La sfinge ha una animazione che inizierà quando la tel
 
 La scena è stata realizzata creando le piramidi ricorsivamente e la sfinge con la giustapposizione di vari cubi in modo da darle una 
 forma credibile. Il colore del terreno è ottenuto dalla combinazione di una HemisphereLight e di una DirectionalLight che illumina la sfinge. 
-Per semplicità, il colore è rimasto quello iniziale e ci siamo limitati a modificare la grandezza del piano e la DirectionalLight, facendola
+Il colore è stato cambiato in un colore rassomigliate alla sabbia; abbiamo modificato la grandezza del piano e la DirectionalLight, facendola
 provenire da un cubo rappresentante il sole.
 Il tutto è stato fatto in JavaScript e usando la libreria Three.js, quindi nessun editor o altro è stato usato. 
 Il processo è stato diviso in due parti: una persona ha svolto l'animazione della camera e la generazione delle piramidi mentre l'altra 
