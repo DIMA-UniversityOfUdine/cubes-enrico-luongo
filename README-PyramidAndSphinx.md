@@ -22,6 +22,12 @@ dall'inizio della scena. La sfinge ha una animazione che inizierà quando la tel
 # IMMAGINI
 
 ![Example 1](snapshots/Immagine1.png)
+
+![Example 2](snapshots/Immagine2.png)
+
+![Example 3](snapshots/Immagine3.png)
+
+![Example 4](snapshots/Immagine4.png)
 --------------------------------------------------------------------------------------------------------------------------------
 
 # PROCESSO
