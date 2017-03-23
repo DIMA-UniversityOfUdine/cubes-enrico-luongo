@@ -1,0 +1,631 @@
+<html>
+	<head>
+		<title>PyramidAndSphinx</title>
+		<style>
+		
+		body {
+			font-family: Monospace;
+			background-color: #f0f0f0;
+			margin: 0px;
+			overflow: hidden;
+		}
+		
+		canvas { 
+			width: 100%; 
+			height: 100%;
+		}
+	
+	</style>
+		<script src="lib/three.min.js"></script>
+		<script src="lib/stats.min.js"></script>
+		<script src="lib/Coordinates.js"></script>
+		<script src="lib/OrbitControls.js"></script>
+	</head>
+	<body>
+		
+		<script>
+		
+		var scene, camera, renderer, controls, stats;
+		
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			renderer = new THREE.WebGLRenderer( {antialias: true} );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setClearColor( 0x2271b3 );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.gammaInput = true;
+			renderer.gammaOutput = true;
+			renderer.shadowMap.enabled = true;
+			document.body.appendChild( renderer.domElement );
+			
+			camera.position.set(-30, 12, 0);
+			camera.lookAt( new THREE.Vector3(0,12,0));
+			
+			
+			var geometry_sun = new THREE.BoxGeometry(50, 50 ,50);
+			var material_sun = new THREE.MeshBasicMaterial( {color:0xE26200} );
+			var cube_sun = new THREE.Mesh(geometry_sun, material_sun);
+			cube_sun.position.set(-500, 500, -500);
+			scene.add(cube_sun);
+			
+			hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+			hemiLight.color.setHSL( 0.6, 1, 0.6 );
+			hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+			hemiLight.position.set( 0, 500, 0 );
+			scene.add( hemiLight );
+
+			
+			dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+			dirLight.color.setHSL( 0.1, 1, 0.95 );
+			dirLight.position.set( -1, 1, -1 );
+			dirLight.position.multiplyScalar( 248 );
+			scene.add( dirLight );
+			dirLight.castShadow = true;
+			dirLight.shadow.mapSize.width = 4096;
+			dirLight.shadow.mapSize.height = 4096;
+			
+			var d = 200;
+			dirLight.shadow.camera.left = -d;
+			dirLight.shadow.camera.right = d;
+			dirLight.shadow.camera.top = d;
+			dirLight.shadow.camera.bottom = -d;
+			dirLight.shadow.camera.far = 700;
+			dirLight.shadow.bias = -0.0001;
+			
+	
+			var targetObject = new THREE.Object3D();
+			targetObject.position.set(0, 0, 80);
+			scene.add(targetObject);
+			dirLight.target = targetObject;
+			
+			// uncomment if you need to draw directionalLight axis
+			//var dirlight_helper = new THREE.CameraHelper( dirLight.shadow.camera );
+			//scene.add( dirlight_helper );
+			
+
+			// GROUND
+			var groundGeo = new THREE.PlaneBufferGeometry( 500, 500 );
+			var groundMat = new THREE.MeshPhongMaterial( { color: 0xfde38d } ); // specular: defines how shiny the material is and the color of its shine.
+			groundMat.color.setHSL( 0.1, 1, 0.6 );
+			var ground = new THREE.Mesh( groundGeo, groundMat );
+			ground.position.y = -0.5;
+			ground.rotation.x = -Math.PI/2;
+			scene.add( ground );
+			ground.receiveShadow = true;
+			
+			
+			//GRID: uncomment if you need to draw a grid
+			/*var size = 1000;
+			var divisions = 1000;
+			var grid = new THREE.GridHelper(size, divisions);
+			grid.position.y = -0.5;
+			scene.add(grid);
+			*/
+			
+			// PYRAMID PART
+			
+			var geometry = new THREE.BoxGeometry(1,1,1);
+			var loader = new THREE.TextureLoader();
+			loader.crossOrigin = '';
+			var texture = loader.load('textures/mattoni.jpg');
+			var material = new THREE.MeshPhongMaterial({ map:texture });
+			
+			// deploy a cube of size (1, 1, 1) in pos (x,y,z) composed of material (mat)
+			function deployCube(xpos, ypos, zpos, geo, mat){
+				var cube = new THREE.Mesh( geo, mat );
+				cube.position.x = xpos;
+				cube.position.y = ypos;
+				cube.position.z = zpos;
+				cube.castShadow = true;
+				cube.receiveShadow = true;
+				scene.add(cube);
+				return cube;
+			}
+			
+			
+			function createPerimeter(posx, posy, posz, width, geo, mat){
+				var x1 = posx - (width/2) + 0.5;
+				var x2 = posx + (width/2) - 0.5;
+				var x21 = posx + (width/2) - 0.5;
+				var x22 = posx + (width/2) - 0.5; 
+				var z1 = posz - (width/2) + 0.5;
+				var z2 = posz + (width/2) - 0.5; 
+				var z21 = posz + (width/2) - 0.5; 
+				var z22 = posz + (width/2) - 0.5; 
+				var id1 = setInterval(frame1, 100);
+					function frame1(){
+						if(x21< x1){
+							clearInterval(id1);
+						} else {
+							deployCube(x21, posy, z1, geo, mat);
+							x21--;
+						}
+					}
+				var id2 = setInterval(frame2, 100);
+					function frame2(){
+						if(x22< x1){
+							clearInterval(id2);
+						} else {
+							deployCube(x22, posy, z2, geo, mat);
+							x22--;
+						}
+					}
+				var id3 = setInterval(frame3, 100);
+					function frame3(){
+						if(z21<= z1){
+							clearInterval(id3);
+						} else {
+							deployCube( x1, posy, z21, geo, mat);
+							z21--;
+						}
+					}				
+				var id4 = setInterval(frame4, 100);
+					function frame4(){
+						if(z22<= z1){
+							clearInterval(id4);
+						} else {
+							deployCube( x2, posy, z22, geo, mat);
+							z22--;
+						}
+					}
+			}		
+
+			
+			function createPyramid(posx, posy, posz, basewidth, height, geo, mat) {
+				if (height > 1){
+					createPerimeter(posx, posy, posz, basewidth, geo, mat);
+					setTimeout(createPyramid, 1000, posx, posy+1, posz, basewidth - 2, height - 1, geo, mat);
+				} else {
+					createPerimeter(posx, posy, posz, basewidth, geo, mat);
+				}
+			}
+		
+			setTimeout(createPyramid, 1000, 57, 0, -60, 31, 20, geometry, material); 
+			setTimeout(createPyramid, 16000, 0, 0, 0, 29, 18, geometry, material); 
+
+			
+			// SPHINX PART
+			
+			//BODY			
+
+			var body_geometry = new THREE.BoxGeometry(4,3,10);
+			var material = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
+			var body = new THREE.Mesh( body_geometry, material );
+			body.castShadow = true;
+			body.receiveShadow = true;
+			body.position.z = 65;
+			body.position.y = 1;
+			scene.add( body );
+			
+			var part_geometry = new THREE.BoxGeometry(4,2.5,2.5);
+			for(var i=5;i>=-5;i-=10) {
+				var part = new THREE.Mesh( part_geometry, material );
+				part.rotation.x = 45 * Math.PI/180;
+				part.position.set(0,0.3,i);
+				body.add( part );
+				part.castShadow = true;
+				part.receiveShadow = true;
+			}
+
+			//HEAD
+
+			var neck_geometry = new THREE.BoxGeometry(3,1,2);
+			var neck = new THREE.Mesh( neck_geometry, material );
+			neck.position.set(0,1.6,4);
+			body.add( neck );			
+
+			var neck1_geometry = new THREE.BoxGeometry(1.25,0.5,1.25);
+			var neck1 = new THREE.Mesh( neck1_geometry, material );
+			neck1.position.set(0,0.7,0.3);
+			neck.add( neck1 );
+			var head_geometry = new THREE.BoxGeometry(2.5,3.5,2.5);
+			var head = new THREE.Mesh( head_geometry, material );
+			head.scale.set(0.5,0.5,0.5);
+			head.position.set(0,1,0);
+			head.castShadow = true;
+			head.receiveShadow = true;
+			neck1.add( head );
+			var face1_geometry = new THREE.BoxGeometry(0.8,3.5,2.5);
+			var facesx1 = new THREE.Mesh( face1_geometry, material );
+			facesx1.rotation.z = -15 * Math.PI/180;
+			facesx1.position.set(1.2,-0.7,0);
+			head.add( facesx1 );
+			facesx1.castShadow = true;
+			facesx1.receiveShadow = true;
+			var facedx1 = new THREE.Mesh( face1_geometry, material );
+			facedx1.rotation.z = 15 * Math.PI/180;
+			facedx1.position.set(-1.2,-0.7,0);
+			head.add( facedx1 );
+			facedx1.castShadow = true;
+			facedx1.receiveShadow = true;
+			var face2_geometry = new THREE.BoxGeometry(0.5,1.8,2.5);
+			var facesx2 = new THREE.Mesh( face2_geometry, material );
+			facesx2.rotation.z = 45 * Math.PI/180;
+			facesx2.position.set(1.2,1.4,0);
+			head.add( facesx2 );
+			facesx2.castShadow = true;
+			facesx2.receiveShadow = true;
+			var facedx2 = new THREE.Mesh( face2_geometry, material );
+			facedx2.rotation.z = -45 * Math.PI/180;
+			facedx2.position.set(-1.2,1.4,0);
+			head.add( facedx2 );
+			facedx2.castShadow = true;
+			facedx2.receiveShadow = true;
+			var head1_geometry = new THREE.BoxGeometry(1.2,0.6,2.5);
+			var head1 = new THREE.Mesh( head1_geometry, material );
+			head1.position.set(0,2,0);
+			head.add( head1 );
+			head1.castShadow = true;
+			head1.receiveShadow = true;
+
+			var cap1_geometry = new THREE.BoxGeometry(7,1.5,1.5);
+			var cap_material = new THREE.MeshPhongMaterial( {color: 0x964b00} );
+			var cap1 = new THREE.Mesh( cap1_geometry, cap_material );
+			cap1.rotation.x = 15 * Math.PI/180;
+			cap1.position.set(0,-1.5,-1.5);
+			head.add( cap1 );
+			cap1.castShadow = true;
+			cap1.receiveShadow = true;
+			var cap_geometry = new THREE.BoxGeometry(4.5,1.5,1.5);
+			var capdx = new THREE.Mesh( cap_geometry, cap_material );
+			capdx.rotation.z = 60 * Math.PI/180;
+			capdx.position.set(-3,1.6,0);
+			cap1.add( capdx );
+			capdx.castShadow = true;
+			capdx.receiveShadow = true;
+			var capsx = new THREE.Mesh( cap_geometry, cap_material );
+			capsx.rotation.z = -60 * Math.PI/180;
+			capsx.position.set(3,1.6,0);
+			cap1.add( capsx );
+			capsx.castShadow = true;
+			capsx.receiveShadow = true;
+			var cap3_geometry = new THREE.BoxGeometry(5.3,2,1.5);
+			var cap3 = new THREE.Mesh( cap3_geometry, cap_material );
+			cap3.position.set(0,1.5,0);
+			cap1.add( cap3 );
+			cap3.castShadow = true;
+			cap3.receiveShadow = true;
+			var cap4_geometry = new THREE.BoxGeometry(3.3,1,1.5);
+			var cap4 = new THREE.Mesh( cap4_geometry, cap_material );
+			cap4.position.set(0,1.5,0);
+			cap3.add( cap4 );
+			cap4.castShadow = true;
+			cap4.receiveShadow = true;
+			var cap5_geometry = new THREE.BoxGeometry(4.9,1,1.5);
+			var cap5 = new THREE.Mesh( cap5_geometry, cap_material );
+			cap5.position.set(0,0.66,0);
+			cap4.add( cap5 );
+			cap5.castShadow = true;
+			cap5.receiveShadow = true;
+			var backdowncap_geometry = new THREE.BoxGeometry(5,1,2.1);
+			var back_downcap = new THREE.Mesh( backdowncap_geometry, cap_material );
+			back_downcap.position.set(0,-0.25,-1.8);
+			cap1.add( back_downcap );
+			back_downcap.castShadow = true;
+			back_downcap.receiveShadow = true;
+			var backupcap_geometry = new THREE.BoxGeometry(5,0.7,1);
+			var back_upcap = new THREE.Mesh( backupcap_geometry, cap_material );
+			back_upcap.rotation.x = -30 * Math.PI/180;
+			back_upcap.position.set(0,-0.1,-1);
+			cap5.add( back_upcap );
+			back_upcap.castShadow = true;
+			back_upcap.receiveShadow = true;
+			var backcap1_geometry = new THREE.BoxGeometry(5,3.65,2.1);
+			var back_cap1 = new THREE.Mesh( backcap1_geometry, cap_material );
+			back_cap1.rotation.x =  50 * Math.PI/180;
+			back_cap1.position.set(0,-1.65,-1.2);
+			back_upcap.add( back_cap1 );
+			back_cap1.castShadow = true;
+			back_cap1.receiveShadow = true;
+			
+			
+			var headcap_geometry = new THREE.BoxGeometry(3,1.1,1.7);
+			var headcap = new THREE.Mesh( headcap_geometry, cap_material );
+			headcap.position.set(0,1.8,0.6);
+			head.add( headcap );
+			var box_geometry = new THREE.BoxGeometry(0.5,0.5,0.5);
+			var box1 = new THREE.Mesh( box_geometry, cap_material );
+			box1.position.set(0,0.3,1);
+			headcap.add( box1 );
+			var box2 = new THREE.Mesh( box_geometry, cap_material );
+			box2.scale.set(0.75,0.75,0.75);
+			box2.position.set(0,-0.4,0);
+			box1.add( box2 );
+			var box3 = new THREE.Mesh( box_geometry, cap_material );
+			box3.scale.set(0.75,0.75,0.75);
+			box3.position.set(0,-0.4,0);
+			box2.add( box3 );
+
+			var mouth_geometry = new THREE.BoxGeometry(1.2,0.15,0.3);
+			var mouth_material = new THREE.MeshPhongMaterial( {color: 0x964b00} );
+			var uplip = new THREE.Mesh( mouth_geometry, mouth_material );
+			var bottomlip = new THREE.Mesh( mouth_geometry, mouth_material );
+			uplip.position.set(0,-1,1.3);
+			bottomlip.position.set(0,-0.17,0);
+			head.add( uplip);
+			uplip.add( bottomlip );
+			
+			var nose1_geometry = new THREE.BoxGeometry(0.2,1.2,0.5);
+			var nose1 = new THREE.Mesh( nose1_geometry, material );
+			nose1.rotation.x = -30 * Math.PI/180;
+			nose1.position.set(-0.2,0,1.5);
+			head.add( nose1 );
+			var nose2_geometry = new THREE.BoxGeometry(0.3,0.3,0.5);
+			var nose2 = new THREE.Mesh( nose2_geometry, material );
+			nose2.position.set(-0.1,-0.4,0);
+			nose1.add( nose2 );
+			
+			var eye_geometry = new THREE.BoxGeometry(0.8,0.5,0.5);
+			var eye_material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
+			var eyesx = new THREE.Mesh( eye_geometry, eye_material );
+			eyesx.position.set(1,0.5,1.2);			
+			head.add( eyesx );
+			var eyedx = new THREE.Mesh( eye_geometry, eye_material );
+			eyedx.position.set(-1,0.5,1.2);
+			head.add( eyedx );
+
+			var eyeball_geometry = new THREE.BoxGeometry(0.1,0.1,0.1);
+			var black_material = new THREE.MeshPhongMaterial( {color: 0x000000} );
+			var eyeballdx = new THREE.Mesh( eyeball_geometry, black_material );
+			var eyeballsx = new THREE.Mesh( eyeball_geometry, black_material );
+			eyeballdx.position.set(0,0,0.22);
+			eyeballsx.position.set(0,0,0.22);
+			eyesx.add( eyeballsx );
+			eyedx.add(eyeballdx);
+
+			var eyerow_geometry = new THREE.BoxGeometry(1.2,0.1,0.3);
+			var eyerowsx = new THREE.Mesh( eyerow_geometry, black_material );
+			eyerowsx.position.set(0,-0.25,0);
+			eyesx.add( eyerowsx );
+			var eyerowdx = new THREE.Mesh( eyerow_geometry, black_material );
+			eyerowdx.position.set(0,-0.25,0);
+			eyedx.add( eyerowdx );
+			
+			var eyebrows_geometry = new THREE.BoxGeometry(1.2,0.05,0.3);
+			var eyebrowsx = new THREE.Mesh( eyebrows_geometry, black_material );
+			var eyebrowdx = new THREE.Mesh( eyebrows_geometry, black_material );
+			eyebrowsx.position.set(0.1,0.4,0);
+			eyebrowdx.position.set(-0.1,0.4,0);
+			eyesx.add( eyebrowsx );
+			eyedx.add( eyebrowdx );
+
+			var ear_geometry = new THREE.BoxGeometry(1,1.5,0.1);
+			var ear_material = new THREE.MeshPhongMaterial( {color: 0xd2691e} );
+			var earsx1 = new THREE.Mesh( ear_geometry, material );
+			earsx1.position.set(2,0,0.5);
+			head.add( earsx1 );
+			var earsx2 = new THREE.Mesh( ear_geometry, ear_material );
+			earsx2.scale.set(0.5,0.5,0.5);
+			earsx2.position.set(-0.1,0,0.05);
+			earsx1.add( earsx2 );
+			var eardx1 = new THREE.Mesh( ear_geometry, material );
+			eardx1.position.set(-2,0,0.5);
+			head.add( eardx1 );
+			var eardx2 = new THREE.Mesh( ear_geometry, ear_material );
+			eardx2.scale.set(0.5,0.5,0.5);
+			eardx2.position.set(0.1,0,0.05);
+			eardx1.add( eardx2 );
+
+			//LEGS			
+
+			var leg1_geometry = new THREE.BoxGeometry(1.2,1.2,1.2);
+			var leg2_geometry = new THREE.BoxGeometry(1.2,2.6,1.2);
+			var legsx1 = new THREE.Mesh( leg1_geometry, material );
+			legsx1.position.set(2.6,0.5,-4);
+			body.add( legsx1 );
+			legsx1.castShadow = true;
+			legsx1.receiveShadow = true;
+			var legdx1 = new THREE.Mesh( leg1_geometry, material );
+			legdx1.position.set(-2.6,0.5,-4);
+			body.add( legdx1 );
+			legdx1.castShadow = true;
+			legdx1.receiveShadow = true;
+			var legsx2 = new THREE.Mesh( leg2_geometry, material );
+			legsx2.position.set(0,-0.7,0.8);
+			legsx1.add( legsx2 );
+			legsx2.castShadow = true;
+			legsx2.receiveShadow = true;
+			var legdx2 = new THREE.Mesh( leg2_geometry, material );
+			legdx2.position.set(0,-0.7,0.8);
+			legdx1.add( legdx2 );
+			legdx2.castShadow = true;
+			legdx2.receiveShadow = true;
+
+			var foot_geometry = new THREE.BoxGeometry(1.2,0.7,1);
+			var footsx = new THREE.Mesh( foot_geometry, material );
+			footsx.position.set(0,-0.95,1);
+			legsx2.add( footsx );
+			footsx.castShadow = true;
+			footsx.receiveShadow = true;
+			var footdx = new THREE.Mesh( foot_geometry, material );
+			footdx.position.set(0,-0.95,1);
+			legdx2.add( footdx );
+			footdx.castShadow = true;
+			footdx.receiveShadow = true;
+			var toes_geometry = new THREE.BoxGeometry(0.3,0.7,0.3);
+			for(var i=-0.45; i<=0.45; i+= 0.45) {
+				var toessx = new THREE.Mesh( toes_geometry, material );
+				var toesdx = new THREE.Mesh( toes_geometry, material );
+				footsx.add( toessx );
+				toessx.position.set(i,0,0.6);
+				footdx.add( toesdx );
+				toesdx.position.set(i,0,0.6);
+			}
+
+			//ARMS
+			
+			var arm1_geometry = new THREE.BoxGeometry(1.2,1.2,1);
+			var armsx1 = new THREE.Mesh( arm1_geometry, material );
+			armsx1.position.set(2.6,0,3);
+			body.add( armsx1 );
+			armsx1.castShadow = true;
+			armsx1.receiveShadow = true;
+			var armdx1 = new THREE.Mesh( arm1_geometry, material );
+			armdx1.position.set(-2.6,0,3);
+			body.add( armdx1 );
+			armdx1.castShadow = true;
+			armdx1.receiveShadow = true;			
+
+			var arm2_geometry = new THREE.BoxGeometry(1.2,1.5,1.2);
+			var armsx2 = new THREE.Mesh( arm2_geometry, material );
+			armsx2.position.set(0,-0.15,1);
+			armsx1.add( armsx2 );
+			armsx2.castShadow = true;
+			armsx2.receiveShadow = true;
+			var armdx2 = new THREE.Mesh( arm2_geometry, material );
+			armdx2.position.set(0,-0.15,1);
+			armdx1.add( armdx2 );
+			armdx2.castShadow = true;
+			armdx2.receiveShadow = true;
+
+			var arm3_geometry = new THREE.BoxGeometry(1.2,0.7,4);
+			var armsx3 = new THREE.Mesh( arm3_geometry, material );
+			armsx3.position.set(0,-1,1.4);
+			armsx2.add( armsx3 );
+			armsx3.castShadow = true;
+			armsx3.receiveShadow = true;
+			var armdx3 = new THREE.Mesh( arm3_geometry, material );
+			armdx3.position.set(0,-1,1.4);
+			armdx2.add( armdx3 );
+			armdx3.castShadow = true;
+			armdx3.receiveShadow = true;
+
+			var fingers_geometry = new THREE.BoxGeometry(0.2,0.7,0.3);
+			for(var i=0.5;i>=-0.5;i-=0.25) {
+				var fingerssx = new THREE.Mesh( fingers_geometry, material );
+				var fingersdx = new THREE.Mesh( fingers_geometry, material );
+				fingerssx.position.set(i,0,2);
+				armsx3.add( fingerssx );
+				fingersdx.position.set(i,0,2);
+				armdx3.add( fingersdx );
+			}
+
+			//TAIL
+
+			var tail1_geometry = new THREE.BoxGeometry(0.5,0.5,0.5);
+			var tail1 = new THREE.Mesh( tail1_geometry, material );
+			tail1.position.set(0,0.4,-6.6);
+			body.add( tail1 );
+			var tail_geometry = new THREE.BoxGeometry(0.4,0.4,0.4);
+			for(var i=0.2;i<2.8;i+=0.2) {
+				var tail = new THREE.Mesh( tail_geometry, material );
+				tail.position.set(-i/2,-i/1.5,-i);
+				tail1.add( tail );
+				tail.castShadow = true;
+				tail.receiveShadow = true;
+			}
+			tail1.castShadow = true;
+			tail1.receiveShadow = true;
+		
+			
+			
+			
+			
+	
+			stats = new Stats();
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.top = '0px';
+			document.body.appendChild( stats.domElement );
+			
+			// uncomment if you need to draw coordinate axes when building the scene
+			//Coordinates.drawAllAxes();
+			
+			controls = new THREE.OrbitControls( camera );
+			controls.addEventListener( 'change', Render );
+			
+			
+		
+		function Update() {
+			requestAnimationFrame( Update );
+			controls.update();  
+			stats.update();
+			Render();
+		}
+		
+		
+		var x_axis = new THREE.Vector3(1, 0, 0);
+		var y_axis = new THREE.Vector3(0, 1, 0);
+		var z_axis = new THREE.Vector3(0, 0, 1);
+		var refresh1 = 50;
+		var refresh2 = 50;
+		var refresh3 = 50;
+		var refresh4 = 50;
+		var refresh5 = 50;
+		var refresh6 = 50;
+		var refresh7 = 50;
+		var refresh8 = 50;
+		var data_inizio = performance.now();
+		var intervallo_1 = data_inizio + 17000;
+		var intervallo_2 = intervallo_1 + 3000;
+		var intervallo_3 = intervallo_2 + 15000;
+		var intervallo_4 = intervallo_3 + 15000;
+		var intervallo_5 = intervallo_4 + 3000;
+		var intervallo_6 = intervallo_5 + 3000;
+		var intervallo_7 = intervallo_6 + 15000;
+		
+		function Render() {
+				if(performance.now() >= (data_inizio + refresh8)){
+					if((performance.now() % 6000) <= 2999){
+						tail1.rotateY(-1.875*Math.PI/180);
+					} else if((performance.now() % 6000) > 2999){
+					tail1.rotateY(+1.875*Math.PI/180);
+					}
+				refresh8 += 50;
+				}
+
+				/*if(performance.now() >= (data_inizio + refresh1) &&  performance.now() < intervallo_1){
+					if(camera.position.z >= -60 ){
+						camera.position.z -= 0.2;
+					}
+					if(camera.position.x <= 0){
+						camera.position.x += 0.1;
+					}
+					refresh1 += 50;
+				} else if (performance.now() >= (intervallo_1 + refresh2) && performance.now() < intervallo_2){
+					camera.rotateY(-1.5*Math.PI/180);
+					refresh2 += 50;
+				} else if (performance.now() >= (intervallo_2 + refresh3) && performance.now() < intervallo_3){
+					if(camera.position.z <= 0 ){
+					camera.position.z += 0.2;
+					camera.rotateOnAxis(y_axis, -0.15*Math.PI/180 );
+					}
+					if(camera.position.x <= 60){
+						camera.position.x += 0.2;
+						camera.rotateOnAxis(y_axis, -0.15*Math.PI/180 );
+					}
+					refresh3 += 50;
+				}  else if (performance.now() >= (intervallo_3 + refresh4) && performance.now() < intervallo_4){
+					if(camera.position.y <= 72 ){
+					camera.position.y += 0.2;
+					camera.rotateOnAxis(x_axis, -0.15*Math.PI/180 );
+					}
+					if(camera.position.x >= 0){
+						camera.position.x -= 0.2;
+						camera.rotateOnAxis(x_axis, -0.15*Math.PI/180 );
+					}
+					refresh4 += 50;
+				} else if (performance.now() >= (intervallo_4 + refresh5) && performance.now() < intervallo_5){
+					camera.rotateX(+1.5*Math.PI/180);
+					refresh5 += 50;
+				} else if (performance.now() >= (intervallo_5 + refresh6) && performance.now() < intervallo_6){
+					camera.rotateY(-1.5*Math.PI/180);
+					refresh6 += 50;
+				} else if (performance.now() >= (intervallo_6 + refresh7) && performance.now() < intervallo_7){
+					if(camera.position.y > 4 ){
+					camera.position.y -= 0.24;
+					}
+					if(camera.position.z <= 80){
+						camera.position.z += 0.2666;
+					}
+					refresh7 += 50;
+				}
+				*/
+			renderer.render(scene, camera);
+		}
+		
+		Update();
+			
+		</script>
+	</body>
+</html>
