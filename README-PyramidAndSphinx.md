@@ -4,11 +4,11 @@
 
 L'idea inziale è stata quella di creare un ambiente egizio, con una o più piramidi che vengono generate 
 nella scena mano a mano che il tempo passa e una sfinge a cui applicare una certa animazione.
-La scelta è stata quella di modificare il file StartingCode-withLights.html per ottenere una effetto migliore, 
+La scelta è stata quella di modificare il file StartingCode-withLights.html per ottenere un effetto migliore, 
 applicando però le ombre alla sola sfinge. 
 Per quanto riguarda la scelta tra applicare una texture al terreno o creare un "video" della scena, abbiamo scelto
-il video. Questo è stato ottenuto facendo eseguire alla camera prospettica traslazioni e rotazioni nella scena in modo
-da presentarla e dare una vista completa.
+il video. Questo è stato ottenuto applicando alla camera prospettica traslazioni e rotazioni in modo da dare una vista 
+completa della scena.
 Infine il progetto fa uso di varie librerie di Three.js (quella incluse inzialmente) contenute in lib, una texture 
 per le piramidi contenuta in textures,un file PyramidsAndSphinx.html contenente tutto il codice ed una cartella snapshots con
 alcuni esempi.
@@ -41,6 +41,10 @@ Il tutto è stato fatto in JavaScript e usando la libreria Three.js, quindi ness
 Il processo è stato diviso in due parti: una persona ha svolto l'animazione della camera e la generazione delle piramidi mentre l'altra 
 ha realizzato la sfinge e la sua animazione.
 
+# NOTE
+
+A causa di una politica di sicurezza di google-chrome le texture della piramide non vengono visualizzate e le piramidi appariranno nere lucenti.
+Con altri browsers il problema non si verifica.
 <!-- Markdeep: -->
 
  
