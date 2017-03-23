@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 
-DESCRIZIONE
+# DESCRIZIONE
 
 L'idea inziale è stata quella di creare un ambiente egizio, con una o più piramidi che vengono generate 
 nella scena mano a mano che il tempo passa e una sfinge a cui applicare una certa animazione.
@@ -14,15 +14,18 @@ per le piramidi contenuta in textures e di un file PyramidsAndSphinx.html conten
 
 ----------------------------------------------------------------------------------------------------------------------------
 
-RISULTATI
+# RISULTATI
+
 La scena è composta da due piramidi che vengono create durante i movimenti della telecamera ed una sfinge che è presente 
 dall'inizio della scena. La sfinge ha una animazione che inizierà quando la telecamera si troverà di fronte a lei, senza ripetersi.
 
-IMMAGINI
+# IMMAGINI
 
+![Example 1](snapshots/Immagine1.png)
 --------------------------------------------------------------------------------------------------------------------------------
 
-PROCESSO
+# PROCESSO
+
 La scena è stata realizzata creando le piramidi ricorsivamente e la sfinge con la giustapposizione di vari cubi in modo da darle una 
 forma credibile. Il colore del terreno è ottenuto dalla combinazione di una HemisphereLight e di una DirectionalLight che illumina la sfinge. 
 Per semplicità, il colore è rimasto quello iniziale e ci siamo limitati a modificare la grandezza del piano e la DirectionalLight, facendola
