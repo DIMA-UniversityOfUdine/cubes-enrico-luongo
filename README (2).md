@@ -32,14 +32,5 @@ Il processo è stato diviso in due parti: una persona ha svolto l'animazione del
 ha realizzato la sfinge e la sua animazione.
 
 <!-- Markdeep: -->
-<style class="fallback">
-	body{visibility:hidden;white-space:pre;font-family:monospace}
-</style>
-<script src="markdeep.min.js">
-</script>
-<script src="https://casual-effects.com/markdeep/latest/markdeep.min.js">
-</script>
-<script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")
-</script>
 
  
