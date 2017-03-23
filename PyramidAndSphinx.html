@@ -531,14 +531,14 @@
 			// uncomment if you need to draw coordinate axes when building the scene
 			//Coordinates.drawAllAxes();
 			
-			controls = new THREE.OrbitControls( camera );
-			controls.addEventListener( 'change', Render );
+			//controls = new THREE.OrbitControls( camera );
+			//controls.addEventListener( 'change', Render );
 			
 			
 		
 		function Update() {
 			requestAnimationFrame( Update );
-			controls.update();  
+			//controls.update();  
 			stats.update();
 			Render();
 		}
@@ -555,6 +555,7 @@
 		var refresh6 = 50;
 		var refresh7 = 50;
 		var refresh8 = 50;
+		var refresh9 = 50;
 		var data_inizio = performance.now();
 		var intervallo_1 = data_inizio + 17000;
 		var intervallo_2 = intervallo_1 + 3000;
@@ -562,7 +563,8 @@
 		var intervallo_4 = intervallo_3 + 15000;
 		var intervallo_5 = intervallo_4 + 3000;
 		var intervallo_6 = intervallo_5 + 3000;
-		var intervallo_7 = intervallo_6 + 15000;
+		var intervallo_7 = intervallo_6 + 17000;
+		var intervallo_8 = intervallo_7 + 10000;
 		
 		function Render() {
 				if(performance.now() >= (data_inizio + refresh8)){
@@ -619,6 +621,16 @@
 						camera.position.z += 0.2666;
 					}
 					refresh7 += 50;
+				} else if (performance.now() >= (intervallo_7 + refresh9) && performance.now() < intervallo_8){
+					if(camera.position.z >= 65 ){
+					camera.position.z -= 0.2;
+					camera.rotateOnAxis(y_axis, -0.3*Math.PI/180 );
+					}
+					if(camera.position.x >= -15){
+						camera.position.x -= 0.2;
+						camera.rotateOnAxis(y_axis, -0.3*Math.PI/180 );
+					}
+					refresh9 += 50;
 				}
 				
 			renderer.render(scene, camera);
