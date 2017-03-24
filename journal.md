@@ -3,6 +3,7 @@
 # 20/03/17
 Giocato con il codice dei tre file base per capire le varie funzioni di illuminazione, per i movimenti della camera, 
 del terreno e delle ombre ed inoltre abbiamo aggiunto i commenti alle funzioni nuove.
+Ripiegato dalla priam alla seconda idea.
 
 # 21/03/17
 Iniziato lo sviluppo della sfinge e delle piramidi.
@@ -22,7 +23,8 @@ Unita la sfinge alla scena principale.
 Ultime rifiniture.
 
 # 24/03/17
-Aggiunta ulteriore animazione alla sfinge
-Modificati leggermente alcuni movimenti finali della telecamera
+Aggiunta ulteriore animazione alla sfinge.
+Modificati leggermente alcuni movimenti finali della telecamera.
+Rifiniture finali.
 
 <!-- Markdeep: -->

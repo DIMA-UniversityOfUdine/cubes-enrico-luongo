@@ -2,7 +2,9 @@
 
 # DESCRIZIONE
 
-L'idea inziale è stata quella di creare un ambiente egizio, con una o più piramidi che vengono generate 
+L'idea inziale è stata quella di creare una piccola scena interattiva con un cubo che poteva muoversi avanti, di lato ed indietro
+con i comandi WASD e che poteva saltare con SPACE. Il giocatore doveva superare un percorso ad ostacoli per arrivare alla vittoria.
+La seconda idea (e quella finale) è stata quella di creare un ambiente egizio, con una o più piramidi che vengono generate 
 nella scena mano a mano che il tempo passa e una sfinge a cui applicare una certa animazione.
 La scelta è stata quella di modificare il file StartingCode-withLights.html per ottenere un effetto migliore, 
 applicando però le ombre alla sola sfinge. 
@@ -18,7 +20,8 @@ alcuni esempi.
 # RISULTATI
 
 La scena è composta da due piramidi che vengono create durante i movimenti della telecamera ed una sfinge che è presente 
-dall'inizio della scena. La sfinge ha una animazione che si ripeterà in loop dall'inizio della scena.
+dall'inizio della scena. La sfinge ha una animazione che si ripeterà in loop dall'inizio della scena ed una che inizierà quando
+la telecamera sarà nelle vicinanze.
 
 # IMMAGINI
 
