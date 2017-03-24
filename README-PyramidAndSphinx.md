@@ -45,6 +45,9 @@ ha realizzato la sfinge e la sua animazione.
 
 A causa di una politica di sicurezza di google-chrome le texture della piramide non vengono visualizzate e le piramidi appariranno nere lucenti.
 Con altri browsers il problema non si verifica.
+Il file è stato testato con google-chome; con altri browsers alcune animazioni potrebbero risultare ritardate portando allo sfasamento delle 
+animazioni successive.
+
 <!-- Markdeep: -->
 
  
