@@ -516,11 +516,7 @@
 				tail.receiveShadow = true;
 			}
 			tail1.castShadow = true;
-			tail1.receiveShadow = true;
-		
-			
-			
-			
+			tail1.receiveShadow = true
 			
 	
 			stats = new Stats();
@@ -563,10 +559,11 @@
 		var intervallo_4 = intervallo_3 + 15000;
 		var intervallo_5 = intervallo_4 + 3000;
 		var intervallo_6 = intervallo_5 + 3000;
-		var intervallo_7 = intervallo_6 + 17000;
+		var intervallo_7 = intervallo_6 + 18500;
 		var intervallo_8 = intervallo_7 + 10000;
 		
 		function Render() {
+				// codice movimento della coda
 				if(performance.now() >= (data_inizio + refresh8)){
 					if((performance.now() % 6000) <= 2999){
 						tail1.rotateY(-1.875*Math.PI/180);
@@ -575,7 +572,14 @@
 					}
 				refresh8 += 50;
 				}
-
+				
+				// codice animazione sfinge 
+				// da far inziare a 73000 +-[1500] ms circa se vuoi farla alzare quando sei davanti
+				// altrimenti 85000 ms circa quando sei a lato
+				
+				
+				
+				// codice traslazioni e rotazioni della camera nella scena
 				if(performance.now() >= (data_inizio + refresh1) &&  performance.now() < intervallo_1){
 					if(camera.position.z >= -60 ){
 						camera.position.z -= 0.2;
@@ -623,15 +627,16 @@
 					refresh7 += 50;
 				} else if (performance.now() >= (intervallo_7 + refresh9) && performance.now() < intervallo_8){
 					if(camera.position.z >= 65 ){
-					camera.position.z -= 0.2;
-					camera.rotateOnAxis(y_axis, -0.3*Math.PI/180 );
+					camera.position.z -= 0.075;
+					camera.rotateOnAxis(y_axis, -0.1875*Math.PI/180 );
 					}
-					if(camera.position.x >= -15){
-						camera.position.x -= 0.2;
-						camera.rotateOnAxis(y_axis, -0.3*Math.PI/180 );
+					if(camera.position.x >= -20){
+						camera.position.x -= 0.1;
+						camera.rotateOnAxis(y_axis, -0.1875*Math.PI/180 );
 					}
 					refresh9 += 50;
 				}
+				
 				
 			renderer.render(scene, camera);
 		}

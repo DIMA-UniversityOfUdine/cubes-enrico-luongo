@@ -21,4 +21,8 @@ Completati i movimenti della camera per la realizzazione del video.
 Unita la sfinge alla scena principale.
 Ultime rifiniture.
 
+# 24/03/17
+Aggiunta ulteriore animazione alla sfinge
+Modificati leggermente alcuni movimenti finali della telecamera
+
 <!-- Markdeep: -->
