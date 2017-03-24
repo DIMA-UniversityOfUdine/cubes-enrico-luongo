@@ -186,8 +186,6 @@
 			
 			// SPHINX PART
 			
-			//BODY			
-
 			var body_geometry = new THREE.BoxGeometry(4,3,10);
 			var material = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
 			var body = new THREE.Mesh( body_geometry, material );
@@ -258,6 +256,8 @@
 			head1.castShadow = true;
 			head1.receiveShadow = true;
 
+			//CAP
+			
 			var cap1_geometry = new THREE.BoxGeometry(7,1.5,1.5);
 			var cap_material = new THREE.MeshPhongMaterial( {color: 0x964b00} );
 			var cap1 = new THREE.Mesh( cap1_geometry, cap_material );
@@ -336,6 +336,8 @@
 			box3.position.set(0,-0.4,0);
 			box2.add( box3 );
 
+			//MOUTH AND NOSE
+			
 			var mouth_geometry = new THREE.BoxGeometry(1.2,0.15,0.3);
 			var mouth_material = new THREE.MeshPhongMaterial( {color: 0x964b00} );
 			var uplip = new THREE.Mesh( mouth_geometry, mouth_material );
@@ -354,6 +356,8 @@
 			var nose2 = new THREE.Mesh( nose2_geometry, material );
 			nose2.position.set(-0.1,-0.4,0);
 			nose1.add( nose2 );
+			
+			//EYES
 			
 			var eye_geometry = new THREE.BoxGeometry(0.8,0.5,0.5);
 			var eye_material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
@@ -389,6 +393,8 @@
 			eyesx.add( eyebrowsx );
 			eyedx.add( eyebrowdx );
 
+			//EARS
+			
 			var ear_geometry = new THREE.BoxGeometry(1,1.5,0.1);
 			var ear_material = new THREE.MeshPhongMaterial( {color: 0xd2691e} );
 			var earsx1 = new THREE.Mesh( ear_geometry, material );
@@ -504,18 +510,19 @@
 
 			var tail1_geometry = new THREE.BoxGeometry(0.5,0.5,0.5);
 			var tail1 = new THREE.Mesh( tail1_geometry, material );
+			tail1.rotation.y = 45 * Math.PI/180;
 			tail1.position.set(0,0.4,-6.6);
 			body.add( tail1 );
 			var tail_geometry = new THREE.BoxGeometry(0.4,0.4,0.4);
 			for(var i=0.2;i<2.8;i+=0.2) {
 				var tail = new THREE.Mesh( tail_geometry, material );
-				tail.position.set(-i/2,-i/1.5,-i);
+				tail.position.set(0,-i/1.5,-i);
 				tail1.add( tail );
 				tail.castShadow = true;
 				tail.receiveShadow = true;
 			}
 			tail1.castShadow = true;
-			tail1.receiveShadow = true
+			tail1.receiveShadow = true;
 			
 	
 			stats = new Stats();
@@ -561,6 +568,74 @@
 		var intervallo_7 = intervallo_6 + 18500;
 		var intervallo_8 = intervallo_7 + 10000;
 		
+		//SPHINX ANIMATION CODE
+		
+		//sfinge si alza
+		function move() {
+			if(body.position.y <= 2) {
+				body.position.y += 0.005;
+				legsx1.rotateX(0.25*Math.PI/180);
+				legdx1.rotateX(0.25*Math.PI/180);
+				legsx2.rotateX(-0.25*Math.PI/180);
+				legdx2.rotateX(-0.25*Math.PI/180);
+				legsx2.position.y -= 0.0012;
+				legdx2.position.y -= 0.0012;
+				legsx2.position.z += 0.003;
+				legdx2.position.z += 0.003;
+				armsx1.rotateX(-0.45*Math.PI/180);
+				armdx1.rotateX(-0.45*Math.PI/180);
+				armsx2.rotateX(-0.04*Math.PI/180);
+				armdx2.rotateX(-0.04*Math.PI/180);
+				armsx3.rotateX(0.8*Math.PI/180);
+				armdx3.rotateX(0.8*Math.PI/180);
+				armsx3.position.z -= 0.015;
+				armdx3.position.z -= 0.015;
+				}
+		}
+		
+		function delayMove() {
+			setTimeout(move, 76500);
+		}
+		
+		// sollevamento zampe anteriori 
+		function stand() {
+			if((performance.now() < 86000) && (body.position.y <= 4)) {
+				body.rotateX(-0.25*Math.PI/180);
+				body.position.y += 0.017;
+				legsx1.rotateX(0.25*Math.PI/180);
+				legdx1.rotateX(0.25*Math.PI/180);
+				tail1.rotateX(0.4*Math.PI/180);
+				armsx3.rotateX(-0.3*Math.PI/180);
+				armdx3.rotateX(-0.35*Math.PI/180);
+				armsx3.position.z += 0.005;
+				armdx3.position.y -= 0.01;
+				armdx3.position.z += 0.005;
+			}
+		}
+		
+		function delayStand() {
+			setTimeout(stand, 83500);
+		}
+		
+		//ritorno alla posizione originale
+		function sit() {
+			if(body.position.y >= 2.01) {
+				body.rotateX(0.25*Math.PI/180);
+				body.position.y -= 0.017;
+				legsx1.rotateX(-0.25*Math.PI/180);
+				legdx1.rotateX(-0.25*Math.PI/180);
+				armsx3.rotateX(0.3*Math.PI/180);
+				armdx3.rotateX(0.35*Math.PI/180);
+				armsx3.position.z -= 0.005;
+				armdx3.position.y += 0.01;
+				armdx3.position.z -= 0.005;
+			}
+		}
+		
+		function delaySit() {
+			setTimeout(sit, 85700);
+		}
+		
 		function Render() {
 				// codice movimento della coda
 				if(performance.now() >= (data_inizio + refresh8)){
@@ -572,11 +647,10 @@
 				refresh8 += 50;
 				}
 				
-				// codice animazione sfinge 
-				// da far inziare a 73000 +-[1500] ms circa, se vuoi farla alzare quando sei davanti
-				// altrimenti 85000 ms circa, quando sei a lato
-				// ====>
-				
+				// animazione sfinge 
+				delayMove();
+				delayStand();
+				delaySit();
 				
 				// codice traslazioni e rotazioni della camera nella scena
 				if(performance.now() >= (data_inizio + refresh1) &&  performance.now() < intervallo_1){
