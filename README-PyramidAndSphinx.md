@@ -38,7 +38,7 @@ la telecamera sarà nelle vicinanze.
 
 La scena è stata realizzata creando le piramidi ricorsivamente e la sfinge con la giustapposizione di vari cubi in modo da darle una 
 forma credibile. Il colore del terreno è ottenuto dalla combinazione di una HemisphereLight e di una DirectionalLight che illumina la sfinge. 
-Il colore è stato cambiato in un colore rassomigliate alla sabbia; abbiamo modificato la grandezza del piano e la DirectionalLight, facendola
+Il colore è stato cambiato in un colore rassomigliante alla sabbia; abbiamo modificato la grandezza del piano e la DirectionalLight, facendola
 provenire da un cubo rappresentante il sole.
 Il tutto è stato fatto in JavaScript e usando la libreria Three.js, quindi nessun editor o altro è stato usato. 
 Il processo è stato diviso in due parti: una persona ha svolto l'animazione della camera e la generazione delle piramidi mentre l'altra 
@@ -46,7 +46,8 @@ ha realizzato la sfinge e la sua animazione.
 
 # NOTE
 
-A causa di una politica di sicurezza di google-chrome le texture della piramide non vengono visualizzate e le piramidi appariranno nere lucenti.
+A causa di una politica di sicurezza di google-chrome le texture della piramide non vengono visualizzate e le piramidi appariranno nere lucenti,
+a meno di modifiche al browser o di esecuzione in server locale.
 Con altri browsers il problema non si verifica.
 Il file è stato testato con google-chome; con altri browsers alcune animazioni potrebbero risultare ritardate portando allo sfasamento delle 
 animazioni successive.

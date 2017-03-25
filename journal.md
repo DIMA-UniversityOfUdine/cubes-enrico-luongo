@@ -3,7 +3,7 @@
 # 20/03/17
 Giocato con il codice dei tre file base per capire le varie funzioni di illuminazione, per i movimenti della camera, 
 del terreno e delle ombre ed inoltre abbiamo aggiunto i commenti alle funzioni nuove.
-Ripiegato dalla priam alla seconda idea.
+Ripiegato dalla prima alla seconda idea.
 
 # 21/03/17
 Iniziato lo sviluppo della sfinge e delle piramidi.
