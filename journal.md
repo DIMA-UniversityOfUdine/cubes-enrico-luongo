@@ -30,6 +30,7 @@ Rifiniture finali.
 # 28/03/17
 Cambiata idea sul progetto, da video a terreno con heightmap.
 Rimossa animazione telecamera.
+Modificata creazione piramide da ricorsiva a iterativa.
 Rimossa una piramide.
 Aggiunto terreno con heightmap.
 
