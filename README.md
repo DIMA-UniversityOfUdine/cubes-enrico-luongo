@@ -32,7 +32,7 @@ La piramide ha un'animazione che inizia dopo la sua generazione e continua in lo
 
 ![Example 3](snapshots/Immagine3.png)
 
-![Example 4](snapshots/Immagine4.png)
+
 --------------------------------------------------------------------------------------------------------------------------------
 
 # PROCESSO
