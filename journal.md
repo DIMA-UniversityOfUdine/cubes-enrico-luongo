@@ -37,6 +37,7 @@ Aggiunto terreno con heightmap.
 Modifiche alla heightmap.
 Aggiunta animazione alla piramide.
 Cambiati timing animazioni.
+Rimosse ombre.
 Ultime rifiniture.
 
 
