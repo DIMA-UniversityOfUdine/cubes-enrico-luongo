@@ -27,4 +27,17 @@ Aggiunta ulteriore animazione alla sfinge.
 Modificati leggermente alcuni movimenti finali della telecamera.
 Rifiniture finali.
 
+# 28/03/17
+Cambiata idea sul progetto, da video a terreno con heightmap.
+Rimossa animazione telecamera.
+Rimossa una piramide.
+Aggiunto terreno con heightmap.
+
+# 29/03/17
+Modifiche alla heightmap.
+Aggiunta animazione alla piramide.
+Cambiati timing animazioni.
+Ultime rifiniture.
+
+
 <!-- Markdeep: -->
